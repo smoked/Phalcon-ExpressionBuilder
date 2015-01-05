@@ -9,7 +9,7 @@ $loader->registerNamespaces(array(
 $loader->register();
 
 $modelExpression = new \Phalcon\Component\ModelExpression();
-$modelExpression->category = [1,2,3];
+$modelExpression->category = [1,2];
 $modelExpression->uid = 7;
 echo "<pre>";
 var_export($modelExpression->build());

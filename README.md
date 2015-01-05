@@ -14,19 +14,18 @@ $loader->registerNamespaces(array(
 $loader->register();
 
 $modelExpression = new \Phalcon\Component\ModelExpression();
-$modelExpression->category = [1,2,3];
+$modelExpression->category = [1,2];
 $modelExpression->uid = 7;
 
 var_dump($modelExpression->build());
 /*
 array (
-  'conditions' => '( category IN (:f6c300461:,:fb516476c:,:f020b8668:) AND uid = :fde7d827b: )',
+  'conditions' => '( category IN (:f6c300461:,:fb516476c:) AND uid = :fde7d827b: )',
   'bind' => 
   array (
     'fde7d827b' => 7,
     'f6c300461' => 1,
     'fb516476c' => 2,
-    'f020b8668' => 3,
   ),
 )
 Phalcon\Mvc\Model::find($expr->build())
