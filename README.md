@@ -16,7 +16,7 @@ $loader->register();
 use \Phalcon\Component;
 
 $modelExpression = new Component\ModelExpression();
-$modelExpression->category = [1,2,3,4];
+$modelExpression->category = [1,2];
 $modelExpression->uid = 7;
 
 var_dump($modelExpression->build());
