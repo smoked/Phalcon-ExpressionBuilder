@@ -2,9 +2,7 @@
 
 namespace Phalcon\Component;
 
-use Phalcon\ExpressionBuilder\Expression;
 use Phalcon\Mvc\Model as PhalconModel;
-use Phalcon\ExpressionBuilder\Conditions;
 
 /**
  * Example usage class
@@ -12,7 +10,7 @@ use Phalcon\ExpressionBuilder\Conditions;
  * Class ModelExpression
  * @package Phalcon\Component
  */
-class ModelExpression extends \Phalcon\ExpressionBuilder\ExpressionBuilder
+class ModelExpression extends ExpressionBuilder\Builder
 {
     protected $_fields;
     protected $_values;
@@ -63,7 +61,7 @@ class ModelExpression extends \Phalcon\ExpressionBuilder\ExpressionBuilder
         }
     }
 
-    public function add(Expression $exp) {
+    public function add(ExpressionBuilder\Expression $exp) {
         $this->validate($exp->getField());
         return parent::add($exp);
     }
@@ -91,12 +89,12 @@ class ModelExpression extends \Phalcon\ExpressionBuilder\ExpressionBuilder
 
         if(is_array($value)) {
             if(count($value) > 1) {
-                $this->_fields[$name] = $this->add(new Conditions\Contains($name, $value));
+                $this->_fields[$name] = $this->add(new ExpressionBuilder\Conditions\Contains($name, $value));
             } elseif(!empty($value)) {
-                $this->_fields[$name] = $this->add(new Conditions\Equal($name, $value[0]));
+                $this->_fields[$name] = $this->add(new ExpressionBuilder\Conditions\Equal($name, $value[0]));
             }
         } else {
-            $this->_fields[$name] = $this->add(new Conditions\Equal($name, $value));
+            $this->_fields[$name] = $this->add(new ExpressionBuilder\Conditions\Equal($name, $value));
         }
 
         $this->_values[$name] = $value;

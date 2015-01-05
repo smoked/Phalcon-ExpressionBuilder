@@ -13,8 +13,10 @@ $loader->registerNamespaces(array(
 
 $loader->register();
 
-$modelExpression = new \Phalcon\Component\ModelExpression();
-$modelExpression->category = [1,2];
+use \Phalcon\Component;
+
+$modelExpression = new Component\ModelExpression();
+$modelExpression->category = [1,2,3,4];
 $modelExpression->uid = 7;
 
 var_dump($modelExpression->build());
@@ -31,7 +33,7 @@ array (
 Phalcon\Mvc\Model::find($expr->build())
 */
 
-$expr = new Phalcon\ExpressionBuilder\ExpressionBuilder();
+$expr = new Component\ExpressionBuilder\Builder();
 
 $expr->eq("A", "eq");
 $expr->neq("B", 'neq');
@@ -43,11 +45,11 @@ $expr->in("G", [1,2,3]);
 $expr->like("H", 'like');
 $expr->btw("I", [1,2]);
 
-$orExpr = new \Phalcon\ExpressionBuilder\ExpressionBuilder('OR');
-$orExpr->eq("field2", '2');
-$orExpr->eq('field3', '3');
+$or = new Component\ExpressionBuilder\Builder('OR');
+$or->eq("field2", '2');
+$or->eq('field3', '3');
 
-$expr->add($orExpr);
+$expr->add($or);
 
 var_dump($expr->build());
 //Phalcon\Mvc\Model::find($expr->build());
