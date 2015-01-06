@@ -16,6 +16,19 @@ class Equal extends Condition {
     const OPERATOR = '=';
 
     /**
+     * Checked value validate
+     *
+     * @param $value
+     * @return bool
+     */
+    public function validateValue($value) {
+        if( $value === null ) {
+            return true;
+        }
+        return parent::validateValue($value);
+    }
+
+    /**
      * @see Expression::getOperator()
      *
      * @param bool $trim

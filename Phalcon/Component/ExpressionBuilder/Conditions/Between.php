@@ -2,8 +2,6 @@
 
 namespace Phalcon\Component\ExpressionBuilder\Conditions;
 
-use Phalcon\Component\ExpressionBuilder\Exception\ErrorException;
-
 /**
  * Creates a BETWEEN comparison expression with the given arguments.
  *
@@ -18,24 +16,35 @@ class Between extends Condition {
     const OPERATOR = 'BETWEEN';
 
     /**
-     * @see parent::getConditions()
+     * @see parent::getBindParamCondition()
      *
-     * @return string
+     * @return array|string|void
      */
-    public function getConditions() {
-        return $this->getField() . $this->getOperator() . implode(" AND ", $this->getBindParam());
+    public function getBindParamCondition() {
+        return implode(" AND ", $this->getBindParam());
     }
 
-    public function setValue($value) {
-        if(!is_array($value) || empty($value) || count($value) != 2) {
-            throw new ErrorException('Parameter $value is invalid');
+    /**
+     * Checked value validate
+     *
+     * @param $value
+     * @return bool
+     */
+    public function validateValue($value) {
+        if(!is_array($value)) {
+            return false;
         }
-        $filter = array_filter($value, function($a){
-            if(is_array($a)) return $a;
+        $filter = array_filter($value, function ($a) {
+            if (is_array($a)) return $a;
         });
-        if(!empty($filter)) {
-            throw new ErrorException('Parameter $value is invalid');
+        if (!empty($filter)) {
+            return false;
         }
-        return parent::setValue($value);
+
+        if(count($value) == 2) {
+            return true;
+        }
+
+        return parent::validateValue($value);
     }
 }

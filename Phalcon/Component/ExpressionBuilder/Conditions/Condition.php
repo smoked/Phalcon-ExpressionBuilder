@@ -16,7 +16,6 @@ class Condition extends Expression {
      */
     const OPERATOR = '';
 
-
     /**
      * Initializes a new Condition
      *
@@ -35,6 +34,24 @@ class Condition extends Expression {
     public function setOperator() {}
 
     /**
+     * Checked value validate
+     *
+     * @param $value
+     * @return bool
+     */
+    public function validateValue($value) {
+        if( empty($value) ) {
+            return false;
+        }
+
+        if( !is_scalar($value) ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @see parent::setValue()
      *
      * @param mixed $value
@@ -42,13 +59,10 @@ class Condition extends Expression {
      * @throws ErrorException
      */
     public function setValue($value) {
-        if( empty($value) && static::OPERATOR != '=' && static::OPERATOR != '!=' ) {
+        if($this->validateValue($value)) {
+            return parent::setValue($value);
+        } else {
             throw new ErrorException('Parameter $value is invalid');
         }
-        if( !is_scalar($value) && $value !== null && static::OPERATOR != 'IN' && static::OPERATOR != 'BETWEEN') {
-            throw new ErrorException('Parameter $value is invalid');
-        }
-
-        return parent::setValue($value);
     }
 }

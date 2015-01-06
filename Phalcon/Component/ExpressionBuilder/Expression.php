@@ -166,12 +166,21 @@ abstract class Expression extends Component
     }
 
     /**
+     * Return bind params in conditions expression
+     *
+     * @return array|string|void
+     */
+    public function getBindParamCondition() {
+        return $this->getBindParam();
+    }
+
+    /**
      * Return conditions to expression
      *
      * @return string
      */
     public function getConditions() {
-        return $this->getField() . $this->getOperator() . $this->getBindParam();
+        return $this->getField() . $this->getOperator() . $this->getBindParamCondition();
     }
 
     /**

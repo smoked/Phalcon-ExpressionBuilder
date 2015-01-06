@@ -2,8 +2,6 @@
 
 namespace Phalcon\Component\ExpressionBuilder\Conditions;
 
-use Phalcon\Component\ExpressionBuilder\Exception\ErrorException;
-
 /**
  * Creates a IN() comparison expression with the given arguments.
  *
@@ -26,30 +24,34 @@ class Contains extends Condition {
     }
 
     /**
-     * @see parent::getConditions()
+     * @see parent::getBindParamCondition()
      *
-     * @return string
+     * @return array|string|void
      */
-    public function getConditions() {
-        return $this->getField() . $this->getOperator() . "(". implode(",", $this->getBindParam()) .")";
+    public function getBindParamCondition() {
+        return "(". implode(",", $this->getBindParam()) .")";
     }
 
     /**
-     * @see parent::setValue()
+     * Checked value validate
      *
-     * @param mixed $value
-     * @return $this
-     * @throws ErrorException
+     * @param $value
+     * @return bool
      */
-    public function setValue($value) {
-        if(is_array($value)) {
-            $filter = array_filter($value, function ($a) {
-                if (is_array($a)) return $a;
-            });
-            if (!empty($filter)) {
-                throw new ErrorException('Parameter $value is invalid');
-            }
+    public function validateValue($value) {
+        if(!is_array($value)) {
+            return false;
         }
-        return parent::setValue($value);
+        $filter = array_filter($value, function ($a) {
+            if (is_array($a)) return $a;
+        });
+        if (!empty($filter)) {
+            return false;
+        }
+        if(is_array($value) && !empty($value)) {
+            return true;
+        }
+
+        return parent::validateValue($value);
     }
 }
