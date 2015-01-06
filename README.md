@@ -14,10 +14,21 @@ $loader->registerNamespaces(array(
 $loader->register();
 
 use \Phalcon\Component;
+use \Phalcon\Component\ExpressionBuilder\Conditions\Equal;
 
 $modelExpression = new Component\ModelExpression();
 $modelExpression->category = [1,2];
 $modelExpression->uid = 7;
+
+$result = ModelName::findFirst(Equal::init('cid', 1)->build());
+/*
+ModelName::findFirst([
+'conditions' => 'cid = :cid:',
+    'bind' => [
+        'cid' => 1
+    ]
+]);
+*/
 
 var_dump($modelExpression->build());
 /*
