@@ -35,6 +35,20 @@ abstract class Expression extends Component
     protected $_value;
 
     /**
+     * Quoted values
+     *
+     * @var
+     */
+    protected $_quote = "'";
+
+    /**
+     * Escape string callback function
+     *
+     * @var
+     */
+    protected $_escapeCallback;
+
+    /**
      * Initializes a new Expression.
      *
      * @param $field        Field expression
@@ -60,6 +74,92 @@ abstract class Expression extends Component
         }
 
         return new $class_instance($field, $value);
+    }
+
+    /**
+     * Return quote
+     *
+     * @return mixed
+     */
+    public function getQuote() {
+        return $this->_quote;
+    }
+
+    /**
+     * @param mixed $quote
+     */
+    public function setQuote($quote) {
+        $this->_quote = $quote;
+    }
+
+    /**
+     * Check the value on the quotes
+     *
+     * @param $value
+     * @return bool
+     */
+    public function isNotQuoted($value) {
+        return is_int($value) || is_float($value);
+    }
+
+    /**
+     * Returns quotes for a specific value
+     *
+     * @return mixed
+     */
+    public function getQuoteValue($value = null) {
+        if($value === null) {
+            $value = $this->getValue();
+        }
+        return $this->isNotQuoted($value) ? '' : $this->getQuote();
+    }
+
+    /**
+     * Exec escape callback
+     *
+     * @return mixed
+     */
+    public function escapeCallback($value) {
+        $callback = $this->getEscapeCallback();
+        return $callback instanceof \Closure ? $callback($value) : $value;
+    }
+
+    /**
+     * Return escapeCallback
+     *
+     * @param mixed $escapeCallback
+     */
+    public function getEscapeCallback() {
+        return $this->_escapeCallback;
+    }
+
+    /**
+     * Set escape callback
+     *
+     * @example
+     * self::setEscapeCallback( function ($val) { return addslashes($val); } );
+     * self::setEscapeCallback( function ($val) { return pg_escape_string($val); } );
+     * etc...
+     *
+     * @param mixed $escapeCallback
+     */
+    public function setEscapeCallback(\Closure $escapeCallback) {
+        $this->_escapeCallback = $escapeCallback;
+    }
+
+    /**
+     * Escape string value
+     * Default none escape string
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function escape($value) {
+        if($this->_escapeCallback === null) {
+            return $value;
+        }
+
+        return $this->escapeCallback($value);
     }
 
     /**
@@ -175,12 +275,39 @@ abstract class Expression extends Component
     }
 
     /**
+     * Return params in conditions expression
+     *
+     * @return array|string|void
+     */
+    public function getParamCondition() {
+        return $this->getParam();
+    }
+
+    /**
+     * Return param
+     *
+     * @return array|string|void
+     */
+    public function getParam() {
+        if($this->getValue() === null) return;
+        $obj = $this;
+
+        return is_array($this->getValue()) ?
+            array_map(function($a) use ($obj) {
+                return $obj->getQuoteValue($a) . $obj->escape( $a ) . $obj->getQuoteValue($a);
+            }, $this->getValue())
+            : $obj->getQuoteValue() . $obj->escape( $this->getValue() ) . $obj->getQuoteValue();
+    }
+
+
+    /**
      * Return conditions to expression
      *
+     * @param boolean $binded
      * @return string
      */
-    public function getConditions() {
-        return $this->getField() . $this->getOperator() . $this->getBindParamCondition();
+    public function getConditions($binded = true) {
+        return $this->getField() . $this->getOperator() . ( $binded ? $this->getBindParamCondition() : $this->getParamCondition() );
     }
 
     /**

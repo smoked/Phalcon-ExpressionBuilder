@@ -74,6 +74,10 @@ class Builder extends Expression {
      * @return Expression
      */
     public function add(Expression $expr) {
+        $expr->setQuote($this->getQuote());
+        if($this->getEscapeCallback() !== null) {
+            $expr->setEscapeCallback($this->getEscapeCallback());
+        }
         array_push($this->_expressions, $expr);
         return $expr;
     }
@@ -83,8 +87,11 @@ class Builder extends Expression {
      *
      * @return string
      */
-    public function getConditions() {
-        $this->prepareBuild();
+    public function getConditions($binded = true) {
+        $this->_conditions = array();
+        foreach($this->_expressions as $expr) {
+            $this->_conditions[] = $expr->getConditions($binded);
+        }
         return "( " . implode($this->getOperator(), $this->_conditions) . " )";
     }
 
@@ -94,7 +101,11 @@ class Builder extends Expression {
      * @return string
      */
     public function getBind() {
-        $this->prepareBuild();
+        $this->_bind = array();
+        foreach($this->_expressions as $expr) {
+            $bind = $expr->getBind();
+            $this->_bind = array_merge($bind, $this->_bind);
+        }
         return $this->_bind;
     }
 
@@ -111,23 +122,15 @@ class Builder extends Expression {
         }
     }
 
-    public function clearBuild() {
-        $this->_conditions = [];
-        $this->_bind = [];
-    }
-
     /**
-     * Prepared expressions build
+     * Magic aliases to expression factory
+     * @see self::$expr_alias
      *
+     * @param $method
+     * @param $arguments
+     * @return Expression
+     * @throws ErrorException
      */
-    public function prepareBuild() {
-        $this->clearBuild();
-        foreach($this->_expressions as $expr) {
-            list($this->_conditions[], $b) = array_values($expr->build());
-            $this->_bind = array_merge($b, $this->_bind);
-        }
-    }
-
     public function __call($method, $arguments) {
         $method = strtolower($method);
         $condition = __NAMESPACE__ . '\Conditions\\' . ucfirst($method);

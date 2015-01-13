@@ -25,6 +25,15 @@ class Between extends Condition {
     }
 
     /**
+     * @see parent::getParamCondition()
+     *
+     * @return array|string|void
+     */
+    public function getParamCondition() {
+        return implode(" AND ", $this->getParam());
+    }
+
+    /**
      * Checked value validate
      *
      * @param $value

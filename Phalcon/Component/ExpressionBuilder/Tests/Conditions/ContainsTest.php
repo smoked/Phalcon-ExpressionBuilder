@@ -24,7 +24,8 @@ class ContainsTest extends AbstractConditionsTest
     public function getTestData() {
         return array(
             array('a', 3, Conditions\Contains::OPERATOR, new Conditions\Contains('a', [1, 2, 3])),
-            array('a1', 2, Conditions\Contains::OPERATOR, Conditions\Contains::init('a1', [1, 2]))
+            array('a1', 2, Conditions\Contains::OPERATOR, Conditions\Contains::init('a1', [1, 2])),
+            array('a2', 3, Conditions\Contains::OPERATOR, Conditions\Contains::init('a2', ['a', 'b', 'c']))
         );
     }
 

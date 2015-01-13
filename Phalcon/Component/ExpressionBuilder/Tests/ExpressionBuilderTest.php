@@ -7,6 +7,37 @@ use Phalcon\Component\ExpressionBuilder\Builder;
 
 class ExpressionBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    public function testSetQuote() {
+        $expr = new Builder();
+        $expr->setQuote('`');
+
+        $this->assertEquals('`', $expr->getQuote());
+        $equal = $expr->eq('A', 'B');
+        $this->assertEquals('`', $equal->getQuote());
+        $equal = $expr->add(Conditions\Equal::init('A', 'B'));
+        $this->assertEquals('`', $equal->getQuote());
+    }
+
+    public function testExpressionQuoted() {
+        $expr  = new Builder();
+
+        $eq   = $expr->add(new Conditions\Equal('A', 'B'));
+        $lt   = $expr->add(new Conditions\Less('A', 10));
+
+        $this->assertEquals($expr->getConditions(false), "( {$eq->getConditions(false)} AND {$lt->getConditions(false)} )");
+    }
+
+    public function testEscapeString() {
+        $expr  = new Builder();
+
+        $expr->setEscapeCallback(function($val) { return $val . 'esc'; });
+
+        $eq   = $expr->add(new Conditions\Equal('A', "'B"));
+        $lt   = $expr->add(new Conditions\Less('A', 10));
+
+        $this->assertEquals($expr->getConditions(false), "( {$eq->getConditions(false)} AND {$lt->getConditions(false)} )");
+    }
+
     public function testBuildExpression() {
         $expr = new Builder();
 
