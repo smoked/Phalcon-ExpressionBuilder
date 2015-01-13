@@ -55,7 +55,7 @@ class ModelExpression extends ExpressionBuilder\Builder
         if($this->getModel() !== null && $this->getDI()->has('modelsMetadata') ) {
             $attributes = $this->getDI()->get('modelsMetadata')->getAttributes($this->getModel());
 
-            if(!array_search($name, $attributes)) {
+            if(array_search($name, $attributes) === false) {
                 throw new \InvalidArgumentException("Parameter {$name} must be in model {$this->getModel()->getSource()}");
             }
         }
