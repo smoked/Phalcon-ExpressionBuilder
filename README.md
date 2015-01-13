@@ -140,6 +140,16 @@ ModelName::find([
     ]
 ]);
 */
+
+$IN = Contains::init('names', ["Alex", "Piter", "Mc'laren"]);
+echo $IN->getConditions(false) . PHP_EOL;
+// names IN ('Alex','Piter','Mac'laren')
+$IN->setEscapeCallback(function($val) { return addslashes($val); });
+echo $IN->getConditions(false) . PHP_EOL;
+// names IN ('Alex','Piter','Mac\'laren')
+$IN->setQuote('`');
+echo $IN->getConditions(false) . PHP_EOL;
+// names IN (`Alex`,`Piter`,`Mc\'laren`)
 ```
 
 Expression building:

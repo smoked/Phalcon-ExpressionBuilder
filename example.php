@@ -11,12 +11,23 @@ use Phalcon\Component\ExpressionBuilder\Conditions as C;
 
 $loader->register();
 
+echo "<pre>";
+$IN = C\Contains::init('names', ["Alex", "Piter", "Mc'laren"]);
+echo $IN->getConditions(false) . PHP_EOL;
+// names IN ('Alex','Piter','Mac'laren')
+$IN->setEscapeCallback(function($val) { return addslashes($val); });
+echo $IN->getConditions(false) . PHP_EOL;
+// names IN ('Alex','Piter','Mac\'laren')
+$IN->setQuote('`');
+echo $IN->getConditions(false) . PHP_EOL;
+// names IN (`Alex`,`Piter`,`Mc\'laren`)
+
 $modelExpression = new Phalcon\Component\ModelExpression();
 $modelExpression->category = [1,2,3];
 $modelExpression->uid = 7;
 $modelExpression->p = 100;
 $pEqual = $modelExpression->add(C\Equal::init('p', 200));
-echo "<pre>";
+
 var_export($modelExpression->build());
 /*
 array (
