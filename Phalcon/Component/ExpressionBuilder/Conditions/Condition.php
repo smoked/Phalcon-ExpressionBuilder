@@ -65,4 +65,19 @@ class Condition extends Expression {
             throw new ErrorException('Parameter $value is invalid');
         }
     }
+
+    /**
+     * @see construct
+     * @example
+     * Model::find( Contains::e("id", [1,2,3]) );
+     *
+     * @param $field
+     * @param $value
+     * @return mixed
+     *
+     * @throws ErrorException
+     */
+    public static function e($field, $value) {
+        return self::init($field, $value)->build();
+    }
 }
