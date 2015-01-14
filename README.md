@@ -21,7 +21,7 @@ PHP >= 5.3
 
 Between:
 ```php
-Between::e('field', [1,2]); # field BETWEEN 1 AND 2
+Between::init('field', [1,2]); # field BETWEEN 1 AND 2
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->btw('field', [1,2]);
@@ -30,7 +30,7 @@ $ExpressionBuilder->add(Between::init('field', [1,2]));
 ```
 Contains:
 ```php
-Contains::e('field', [1,2]); # field IN (1,2)
+Contains::init('field', [1,2]); # field IN (1,2)
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->in('field', [1,2]);
@@ -40,9 +40,9 @@ $ExpressionBuilder->add(Contains::init('field', [1,2]));
 
 Equal:
 ```php
-Equal::e('field', 1); # field = 1
-Equal::e('field', null); # field IS NULL
-Equal::e('field'); # field IS NULL
+Equal::init('field', 1); # field = 1
+Equal::init('field', null); # field IS NULL
+Equal::init('field'); # field IS NULL
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->eq('field', 1);
@@ -52,9 +52,9 @@ $ExpressionBuilder->add(Equal::init('field', 1));
 
 NotEqual:
 ```php
-NotEqual::e('field', 1); # field != 1
-NotEqual::e('field', null); # field IS NOT NULL
-NotEqual::e('field'); # field IS NOT NULL
+NotEqual::init('field', 1); # field != 1
+NotEqual::init('field', null); # field IS NOT NULL
+NotEqual::init('field'); # field IS NOT NULL
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->neq('field', 1);
@@ -64,7 +64,7 @@ $ExpressionBuilder->add(NotEqual::init('field', 1));
 
 Less:
 ```php
-Less::e('field', 1); // field < 1
+Less::init('field', 1); // field < 1
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->lt('field', 1);
@@ -74,7 +74,7 @@ $ExpressionBuilder->add(Less::init('field', 1))
 
 LessOrEqual:
 ```php
-LessOrEqual::e('field', 1); // field <= 1
+LessOrEqual::init('field', 1); // field <= 1
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->lte('field', 1);
@@ -84,7 +84,7 @@ $ExpressionBuilder->add(LessOrEqual::init('field', 1));
 
 Greater:
 ```php
-Greater::e('field', 1); // field > 1
+Greater::init('field', 1); // field > 1
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->gt('field', 1);
@@ -94,7 +94,7 @@ $ExpressionBuilder->add(Greater::init('field', 1));
 
 GreaterOrEqual:
 ```php
-GreaterOrEqual::e('field', 1); // field >= 1
+GreaterOrEqual::init('field', 1); // field >= 1
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->gte('field', 1);
@@ -104,7 +104,7 @@ $ExpressionBuilder->add(GreaterOrEqual::init('field', 1));
 
 Like:
 ```php
-Like::e('field', 1); // field LIKE 1
+Like::init('field', 1); // field LIKE 1
 // Usage from Phalcon\Component\ExpressionBuilder\Builder
 // Alias
 $ExpressionBuilder->like('field', 1);
